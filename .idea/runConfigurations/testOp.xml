@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="testOp" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="main.Tester" />
+    <module name="malafronte-malafronte_es5" />
+    <option name="PROGRAM_PARAMETERS" value="srcjflexcup/exprTest" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

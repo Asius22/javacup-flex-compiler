@@ -1,0 +1,124 @@
+def fibonacci(integer a): integer{
+    integer res;
+
+    if a <= 1 then {
+        return 1;
+    }
+    if a = 2 then {
+        return  1;
+    }
+
+    return fibonacci(a-1) + fibonacci(a-2);
+
+
+
+}
+
+
+
+def stampaMenu(): void{
+    integer i;
+    for i<<0 to 2 loop {
+        if i = 0 then {
+            ("0) somma 2 numeri")-->!;
+        } else {
+            if i = 1 then {
+                ("1) moltiplicazione con somma")-->!;
+            } else {
+                if i = 2 then {
+                    ("2) potenza due numeri")-->!;
+                }
+
+            }
+
+        }
+
+    }
+    ("3) fibonacci")-->!;
+    ("4) divisione intera")-->!;
+    ("5) stampa menu")-->!;
+    ("6) exit")-->!;
+}
+
+start: def main(): void {
+    integer scelta;
+    stampaMenu();
+    scelta<--;
+    while scelta <> 6 loop{
+        if scelta = 0 then{
+            float a, b;
+            a, b <-- "Inserisci i due numeri da sommare";
+            (a, " + ", b, " = ", somma(a, b))-->!;
+        }else{
+            if scelta = 1 then{
+                integer a, b;
+                a, b <-- "inserisci i due numeri da moltiplicare e sommare";
+                ("risultato = ",timesWithSum(a, b))-->!;
+            } else {
+                if scelta = 2 then{
+                    float a;
+                    integer b;
+                    a, b<-- "inserisci il numero x da elevare alla y-esima potenza";
+                    (a, " ^ ", b, " = ", potenza(a, b))-->!;
+                } else {
+                    if scelta = 3 then {
+                        integer a;
+                        a <-- "quanti numeri di fibonacci vuoi vedere?";
+                        ("fibonacci to ", a, ": ", fibonacci(a))-->!;
+                    } else {
+                        if scelta = 4 then {
+                            integer a, b;
+                            a, b <--"inserisci il dividendo e il divisore";
+                            (a, " : ", b, " = ", divisione(a, b))-->!;
+                        } else {
+                            if scelta = 5 then{
+                                stampaMenu();
+                                scelta<--;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        stampaMenu();
+        scelta<--;
+    }
+
+    ("prima parte della stringa da concatenare" & "seconda parte della stringa concatenata")-->!;
+    ("il bool è: ", 1<2)-->!;
+}
+
+def somma(float a, b): float {
+    return a + b;
+}
+
+def timesWithSum(integer a, b): integer{
+    integer res;
+    if b = 1 then {
+        res << a;
+    } else {
+        if b <> 0 then {
+            res << a + timesWithSum(a, b-1);
+        }
+    }
+    return res;
+}
+
+def divisione(integer a, b) : float {
+    return a / b;
+}
+
+def potenza(float a | integer b): float{
+    float res;
+    if b = 0 then {
+        res << 1.0;
+    } else {
+        if b = 1 then {
+            res << a;
+        } else {
+            res << a * potenza(a, b - 1);
+        }
+    }
+    return res;
+}
+

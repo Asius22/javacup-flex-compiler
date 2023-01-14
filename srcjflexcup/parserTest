@@ -1,0 +1,86 @@
+start: def main(): void {
+    integer scelta << 5;
+    var a << 0.0 ,b << 0.0;
+
+    stampaMenu();
+    scelta <-- ;
+    while scelta != 0 loop {
+        var a << 0.0 ,b << 0.0;
+        a, b << 0.0, 2.0;
+        if scelta <> 1 then{
+            a,b <-- "dimmi i due numeri da utilizzare separati da uno spazio";
+
+            if scelta = 2 then {
+                (sumFloat(a,b)) -->!;
+            }
+            else {
+                if scelta = 3 then {
+                    (minusFloat(a,b)) -->!;
+                }
+
+                else {
+                    if scelta = 4 then {
+                        (timesFloat(a,b)) -->!;
+                    }
+                    else {
+                        if scelta = 5 then {
+                            (divisione(4,2)) -->!;
+                        }
+                    }
+                }
+            }
+        }
+            stampaMenu();        scelta <-- ;
+
+
+
+    }
+}
+
+def stampaMenu(): void {
+    ("Scegli l'operazione da eseguire")-->!;
+    ("1) ----- rimostra il menu")-->!;
+    ("2) ----- +")-->!;
+    ("3) ----- -")-->!;
+    ("4) ----- *")-->!;
+    ("5) ----- /")-->!;
+    ("0) ----- exit")-->!;
+    return ;
+}
+
+def sum(integer a,b): integer {
+    return a + b;
+}
+
+def sumFloat(float a,b): float {
+    return a + b;
+}
+
+def minus(integer a,b): integer {
+    return a - b;
+}
+
+def minusFloat(float a,b): float {
+    return a - b;
+}
+
+def times(integer a,b): integer {
+    return a * b;
+}
+
+def timesFloat(float a,b): float {
+    return a * b;
+}
+
+def divisione(integer a,b): float {
+    return a / b;
+}
+
+def divFloat(float a,b): float {
+    return a / b;
+}|*
+
+
+
+
+|
