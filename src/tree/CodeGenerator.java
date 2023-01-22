@@ -329,6 +329,7 @@ public class CodeGenerator implements Visitor {
             case "read" -> ((ReadStmt) stmtNode.getNode()).accept(this);
             case "write" -> ((WriteStmt) stmtNode.getNode()).accept(this);
             case "assign" -> ((AssignStmt) stmtNode.getNode()).accept(this);
+            case "switch" -> ((SwitchStmt) stmtNode.getNode()).accept(this);
             case "while" -> ((WhileStmt) stmtNode.getNode()).accept(this);
             case "funCall" -> {
                 printTab();
@@ -589,6 +590,46 @@ public class CodeGenerator implements Visitor {
             write("(");
             expr.getExpr().accept(this);
             write(")");
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
+    @Override
+    public Object visit(SwitchStmt s) {
+        try {
+            printTab();
+            write("switch ( ");
+            s.getId().accept(this);
+            write(" ) {\n");
+            numTab++;
+            for (CaseStmt c : s.getCaseList())
+                c.accept(this);
+            printTab();
+            write("default: break;\n");
+            numTab--;
+            printTab();
+            write("}");
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
+    @Override
+    public Object visit(CaseStmt c) {
+        try {
+            printTab();
+            write("case ");
+            c.getExpr().accept(this);
+            write(" : \n");
+            numTab++;
+            for (StmtNode s : c.getBody().getStatements())
+                s.accept(this);
+            printTab();
+            write("break;\n");
+            numTab--;
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }

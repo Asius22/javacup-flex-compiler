@@ -308,7 +308,8 @@ public class XMLTreeGenerator implements Visitor {
                 break;
         }
 
-        element.appendChild(e1);
+        if (e1 != null)
+            element.appendChild(e1);
 
         return element;
     }
@@ -483,5 +484,15 @@ public class XMLTreeGenerator implements Visitor {
         element.appendChild((Element) expr.getExpr().accept(this));
 
         return element;
+    }
+
+    @Override
+    public Object visit(SwitchStmt s) {
+        return null;
+    }
+
+    @Override
+    public Object visit(CaseStmt c) {
+        return null;
     }
 }

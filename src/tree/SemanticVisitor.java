@@ -309,6 +309,7 @@ public class SemanticVisitor implements Visitor {
             case "for" -> ((ForStmt) stmtNode.getNode()).accept(this);
             case "read" -> ((ReadStmt) stmtNode.getNode()).accept(this);
             case "write" -> ((WriteStmt) stmtNode.getNode()).accept(this);
+            case "switch" ->((SwitchStmt) stmtNode.getNode()).accept(this);
             case "assign" -> ((AssignStmt) stmtNode.getNode()).accept(this);
             case "while" -> ((WhileStmt) stmtNode.getNode()).accept(this);
             case "funCall" -> ((FunCall) stmtNode.getNode()).accept(this);
@@ -505,6 +506,37 @@ public class SemanticVisitor implements Visitor {
     public Object visit(ParExpr expr) {
 
         return expr.getExpr().accept(this);
+    }
+
+    @Override
+    public Object visit(SwitchStmt s) {
+        VarEntry e =(VarEntry) StackTable.lookup(s.getId().getName());
+        if (e == null)
+            throw new Error("l'id '" + s.getId().getName() + "' non esiste!");
+        String type = e.getType();
+        for (CaseStmt c: s.getCaseList()) {
+            c.getExpr().accept(this);
+            if (!c.getCondType().equals(type))
+                throw new Error("uan variabile di tipo '" + type + "' non può assumere valori di tipo '" + c.getCondType() + "'");
+        }
+        type = s.getCaseList().get(0).accept(this).toString();
+        for (CaseStmt c: s.getCaseList().subList(1, s.getCaseList().size())) {
+            String newType = c.accept(this).toString();
+            if (!type.equals(newType))
+                throw new Error("Lo switch non può tornare valori di tipi diversi!");
+        }
+        return type;
+    }
+
+    /**
+     * l'espressione del case viene controllata già dallo switch, si deve solo controllare il body
+     * @param c
+     * @return
+     */
+    @Override
+    public Object visit(CaseStmt c) {
+        return c.getBody().accept(this).toString();
+
     }
 
     private void initVar(IdInitOp id, TypeLeaf t) {

@@ -60,7 +60,8 @@ RealConst = {IntegerConst}("."{IntegerConst}+)?
     "while" {return symbol(sym.WHILE);}
     "to" {return symbol(sym.TO);}
     "loop" {return symbol(sym.LOOP);}
-
+    "switch" {return symbol(sym.SWITCH);}
+    "case" {return symbol(sym.CASE);}
     /*  operators   */
     "<--" {return symbol(sym.READ);}
     "-->" {return symbol(sym.WRITE);}

@@ -8,11 +8,12 @@ package esercitazione5;
 /** CUP generated interface containing symbol constants. */
 public interface sym {
   /* terminals */
-  public static final int CHAR_CONST = 51;
+  public static final int CHAR_CONST = 53;
   public static final int POW = 34;
   public static final int CHAR = 10;
   public static final int GE = 41;
-  public static final int INTEGER_CONST = 53;
+  public static final int CASE = 50;
+  public static final int INTEGER_CONST = 55;
   public static final int SEMI = 3;
   public static final int INT = 7;
   public static final int OUT = 13;
@@ -33,7 +34,7 @@ public interface sym {
   public static final int MAIN = 2;
   public static final int IF = 15;
   public static final int WRITELN = 22;
-  public static final int ID = 49;
+  public static final int ID = 51;
   public static final int LE = 39;
   public static final int EOF = 0;
   public static final int RETURN = 27;
@@ -42,6 +43,7 @@ public interface sym {
   public static final int PIPE = 5;
   public static final int VOID = 11;
   public static final int EQ = 36;
+  public static final int SWITCH = 49;
   public static final int LBRACK = 46;
   public static final int FLOAT = 45;
   public static final int TIMES = 32;
@@ -52,14 +54,14 @@ public interface sym {
   public static final int TO = 18;
   public static final int WHILE = 17;
   public static final int STR_CONCAT = 35;
-  public static final int REAL_CONST = 52;
+  public static final int REAL_CONST = 54;
   public static final int THEN = 48;
   public static final int NE = 37;
   public static final int LPAR = 23;
   public static final int STRING = 8;
   public static final int DEF = 12;
   public static final int FALSE = 29;
-  public static final int STRING_CONST = 50;
+  public static final int STRING_CONST = 52;
   public static final int GT = 40;
   public static final int VAR = 6;
   public static final String[] terminalNames = new String[] {
@@ -112,6 +114,8 @@ public interface sym {
   "LBRACK",
   "RBRACK",
   "THEN",
+  "SWITCH",
+  "CASE",
   "ID",
   "STRING_CONST",
   "CHAR_CONST",

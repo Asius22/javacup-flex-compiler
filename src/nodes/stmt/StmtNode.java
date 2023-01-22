@@ -21,6 +21,10 @@ public class StmtNode {
         this.node = node;
     }
 
+    public StmtNode(SwitchStmt node){
+        this.node = node;
+        this.type = "switch";
+    }
     public StmtNode(WriteStmt node) {
         this.type = "write";
         this.node = node;

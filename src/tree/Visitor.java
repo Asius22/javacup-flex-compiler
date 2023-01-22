@@ -9,6 +9,7 @@ public interface Visitor {
     Object visit(TypeLeaf typLeaf);
 
     Object visit(FunCall call);
+
     Object visit(IdInitOp idInit);
 
     Object visit(ConstLeaf leaf);
@@ -36,17 +37,30 @@ public interface Visitor {
     Object visit(NonEmptyParamDecl nonEmptyParamDecl);
 
     Object visit(ReturnExprStmt returnExprStmt);
+
     Object visit(AssignStmt returnExprStmt);
+
     Object visit(ElseStmt returnExprStmt);
+
     Object visit(ForStmt returnExprStmt);
+
     Object visit(IfStmt returnExprStmt);
+
     Object visit(ReadStmt returnExprStmt);
+
     Object visit(WhileStmt returnExprStmt);
+
     Object visit(WriteStmt returnExprStmt);
 
     Object visit(VarInitDeclOp v);
-    Object visit (VarObbInitDeclOp v);
-    Object visit (ParExpr expr);
 
+    Object visit(VarObbInitDeclOp v);
+
+    Object visit(ParExpr expr);
+
+
+    Object visit(SwitchStmt s);
+
+    Object visit(CaseStmt c);
 }
 
