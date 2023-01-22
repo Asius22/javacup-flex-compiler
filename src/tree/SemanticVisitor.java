@@ -5,14 +5,15 @@ import nodes.leafs.IdLeaf;
 import nodes.leafs.TypeLeaf;
 import nodes.ops.*;
 import nodes.stmt.*;
-import tree.table.Entry;
-import tree.table.FunEntry;
-import tree.table.StackTable;
-import tree.table.VarEntry;
+import tree.table.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Hashtable;
 
 public class SemanticVisitor implements Visitor {
+    private final SignatureList signatureList = new SignatureList();
+
     @Override
     public Object visit(TypeLeaf typLeaf) {
         return typLeaf.getType();
@@ -20,28 +21,36 @@ public class SemanticVisitor implements Visitor {
 
     @Override
     public Object visit(FunCall call) {
-        FunEntry fun = (FunEntry) StackTable.lookup(call.getFunName().getName());
         String rType;
-        //Controllo che la funzione esista
-        if (fun == null)
+
+        ArrayList<String> signatures = signatureList.getSignature(call.getFunName().getName());
+        if (signatures.size() == 0)
             throw new Error("La funzione '" + call.getFunName().getName() + "' non esiste");
 
-        //Controllo numero parametri
-        if (call.getParamValues().size() != fun.getParamsName().size())
-            throw new Error("IL numero di parametri dovrebbe essere " + fun.getParamsName().size()
-                    + "invece è " + call.getParamValues().size());
-
-        //Controllo tipi dei parametri
-        for (int i = 0; i < fun.getParamsName().size(); i++) {
-            rType = (String) call.getParamValues().get(i).accept(this);
-            if (!fun.getParamsType().get(i).equals(rType)) {
-                System.out.println("--- " + fun.getName() + " " + rType);
-                throw new Error("Il tipo del parametro " + i + " dovrebbe essere '" + fun.getParamsType().get(i) +
-                        "' invece è '" + rType + "'");
+        for (String key : signatures) {
+            FunEntry fun = (FunEntry) StackTable.lookup(key);
+            if (fun == null)
+                throw new Error("La funzione '" + call.getFunName().getName() + "' non esiste");
+            //Controllo numero parametri
+            if (call.getParamValues().size() == fun.getParamsName().size()) {
+               
+                boolean isRight = true;
+                //Controllo tipi dei parametri
+                for (int i = 0; i < fun.getParamsName().size(); i++) {
+                    rType = (String) call.getParamValues().get(i).accept(this);
+                    if (!fun.getParamsType().get(i).equals(rType)) {
+                        isRight = false;
+                        break;
+                    }
+                }
+                if (isRight) {
+                    call.setReturnType(fun.getReturnType());
+                    return fun.getReturnType();
+                }
             }
         }
-        call.setReturnType(fun.getReturnType());
-        return fun.getReturnType();
+
+        throw new Error("non esiste uba funzione di nome '" + call.getFunName().getName() + "' che riceve i parametri indicati");
     }
 
     /**
@@ -215,6 +224,7 @@ public class SemanticVisitor implements Visitor {
 
         FunEntry funEntry = new FunEntry(name, paramsName, paramsType, paramsMode, returnType);
         StackTable.addEntry(funEntry);
+        signatureList.add(funEntry.getSignature());
 
         //creazione scope per il corpo della funzione
         if (fun.isFirstVisit()) {
@@ -309,7 +319,7 @@ public class SemanticVisitor implements Visitor {
             case "for" -> ((ForStmt) stmtNode.getNode()).accept(this);
             case "read" -> ((ReadStmt) stmtNode.getNode()).accept(this);
             case "write" -> ((WriteStmt) stmtNode.getNode()).accept(this);
-            case "switch" ->((SwitchStmt) stmtNode.getNode()).accept(this);
+            case "switch" -> ((SwitchStmt) stmtNode.getNode()).accept(this);
             case "assign" -> ((AssignStmt) stmtNode.getNode()).accept(this);
             case "while" -> ((WhileStmt) stmtNode.getNode()).accept(this);
             case "funCall" -> ((FunCall) stmtNode.getNode()).accept(this);
@@ -510,17 +520,17 @@ public class SemanticVisitor implements Visitor {
 
     @Override
     public Object visit(SwitchStmt s) {
-        VarEntry e =(VarEntry) StackTable.lookup(s.getId().getName());
+        VarEntry e = (VarEntry) StackTable.lookup(s.getId().getName());
         if (e == null)
             throw new Error("l'id '" + s.getId().getName() + "' non esiste!");
         String type = e.getType();
-        for (CaseStmt c: s.getCaseList()) {
+        for (CaseStmt c : s.getCaseList()) {
             c.getExpr().accept(this);
             if (!c.getCondType().equals(type))
                 throw new Error("uan variabile di tipo '" + type + "' non può assumere valori di tipo '" + c.getCondType() + "'");
         }
         type = s.getCaseList().get(0).accept(this).toString();
-        for (CaseStmt c: s.getCaseList().subList(1, s.getCaseList().size())) {
+        for (CaseStmt c : s.getCaseList().subList(1, s.getCaseList().size())) {
             String newType = c.accept(this).toString();
             if (!type.equals(newType))
                 throw new Error("Lo switch non può tornare valori di tipi diversi!");
@@ -530,6 +540,7 @@ public class SemanticVisitor implements Visitor {
 
     /**
      * l'espressione del case viene controllata già dallo switch, si deve solo controllare il body
+     *
      * @param c
      * @return
      */

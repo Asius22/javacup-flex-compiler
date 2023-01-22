@@ -14,7 +14,7 @@ def fibonacci(integer a): integer{
 
 }
 
-
+def stampaMenu(integer a): void{}
 
 def stampaMenu(): void{
     integer i;

@@ -31,6 +31,7 @@ public class StackTable {
             SymbolTable s = stack.get(i);
             if (s.containEntry(name))
                 return s.getEntry(name);
+
         }
         return null;
     }
